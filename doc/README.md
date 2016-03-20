@@ -4,21 +4,11 @@
 
 Copyright (c) 2016 The Talla Authors.
 
-Ed25519 Ref10 implementation for Erlang. Based on the Ed25519 Ref10
-implementation found in Tor.
+Erlang NIF for the Ed25519 Ref10 implementation in Tor.
 
-The Erlang code is licensed under a two-clause BSD license. See the
-
-```
-LICENSE
-```
- file for more information. For information about the license
-from the Tor project, please have a look at the 
-```
-LICENSE.tor
-```
-
-file.
+The Erlang code is licensed under a two-clause BSD license. See the LICENSE
+file for more information. For information about the license for the Tor
+project, please have a look at the LICENSE.tor file.
 
 
 ### <a name="Tests">Tests</a> ###
