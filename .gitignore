@@ -1,0 +1,7 @@
+*.beam
+*.html
+*.o
+*.plt
+*.so
+.rebar3/
+_build/

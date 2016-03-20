@@ -1,0 +1,12 @@
+{application, ed25519_ref10, [
+    {description, "Ed25519 Ref10 Implementation from Tor."},
+    {vsn, "0.1.0"},
+    {modules, []},
+    {registered, []},
+    {applications, [
+        kernel,
+        stdlib
+    ]}
+]}.
+
+%% vim: set ft=erlang :
