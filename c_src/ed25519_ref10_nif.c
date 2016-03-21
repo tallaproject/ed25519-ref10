@@ -42,7 +42,7 @@ static ERL_NIF_TERM enif_ed25519_ref10_sign(ErlNifEnv *env, int argc, ERL_NIF_TE
         return enif_make_badarg(env);
     }
 
-    if (!ed25519_ref10_public_key(public, secret.data) != 0) {
+    if (ed25519_ref10_public_key(public, secret.data) != 0) {
         return make_error_tuple(env, "ed25519_ref10_public_key_failed");
     }
 
