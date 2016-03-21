@@ -33,6 +33,10 @@
 -type signature()  :: binary().
 -type seed()       :: binary().
 
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+-endif.
+
 %% @doc Generate a new Ed25519 keypair.
 -spec keypair() -> keypair().
 keypair() ->
@@ -76,3 +80,30 @@ secret_key_expand(Seed) ->
         PublicKey :: public_key().
 public_key(SecretKey) ->
     ed25519_ref10_nif:public_key(SecretKey).
+
+-ifdef(TEST).
+keypair_test() ->
+    #{ secret := Secret, public := Public } = keypair(),
+    [
+        ?assertEqual(byte_size(Secret), 64),
+        ?assertEqual(byte_size(Public), 32),
+        ?assertEqual(Public, public_key(Secret))
+    ].
+
+sign_test() ->
+    #{ secret := Secret, public := Public } = keypair(),
+    Signature = sign(<<"Hello world!">>, Secret),
+    [
+        ?assert(open(Signature, <<"Hello world!">>, Public))
+    ].
+
+secret_key_expand_test() ->
+    Seed    = <<0:256>>,
+    SecretA = secret_key_expand(Seed),
+    SecretB = secret_key_expand(Seed),
+    [
+        ?assertEqual(SecretA, SecretB),
+        ?assertEqual(public_key(SecretA), public_key(SecretB))
+    ].
+
+-endif.
