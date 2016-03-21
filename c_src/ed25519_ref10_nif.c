@@ -14,11 +14,11 @@ static ERL_NIF_TERM enif_ed25519_ref10_keypair(ErlNifEnv *env, int argc, ERL_NIF
         return enif_make_badarg(env);
     }
 
-    if (!enif_alloc_binary(CRYPTO_PUBLICKEYBYTES, &secret)) {
+    if (!enif_alloc_binary(CRYPTO_SECRETKEYBYTES, &secret)) {
         return make_error_tuple(env, "alloc_failed");
     }
 
-    if (!enif_alloc_binary(CRYPTO_SECRETKEYBYTES, &public)) {
+    if (!enif_alloc_binary(CRYPTO_PUBLICKEYBYTES, &public)) {
         return make_error_tuple(env, "alloc_failed");
     }
 
