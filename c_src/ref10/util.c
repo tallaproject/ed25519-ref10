@@ -5,6 +5,7 @@
 /* See LICENSE for licensing information */
 
 #include "util.h"
+#include "di_ops.h"
 
 #include <sys/types.h>
 #include <sys/uio.h>

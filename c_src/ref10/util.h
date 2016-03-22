@@ -12,10 +12,6 @@
 #include <sys/types.h>
 #include <string.h>
 
-#define fast_memcmp(a,b,c) (memcmp((a),(b),(c)))
-#define fast_memeq(a,b,c)  (0==memcmp((a),(b),(c)))
-#define fast_memneq(a,b,c) (0!=memcmp((a),(b),(c)))
-
 ssize_t read_all(int fd, char *buf, size_t count);
 
 int tor_mem_is_zero(const char *mem, size_t len);
