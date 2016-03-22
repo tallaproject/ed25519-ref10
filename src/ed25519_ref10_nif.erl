@@ -15,7 +15,9 @@
          open/3,
          secret_key/0,
          secret_key_expand/1,
-         public_key/1
+         public_key/1,
+         keypair_from_x25519_keypair/2,
+         public_key_from_x25519_public_key/2
         ]).
 
 %% Initializer.
@@ -70,6 +72,16 @@ secret_key_expand(_) ->
 %% @private
 -spec public_key(binary()) -> binary().
 public_key(_) ->
+    ?nif_stub.
+
+%% @private
+-spec keypair_from_x25519_keypair(binary(), binary()) -> {binary(), binary()}.
+keypair_from_x25519_keypair(_, _) ->
+    ?nif_stub.
+
+%% @private
+-spec public_key_from_x25519_public_key(binary(), non_neg_integer()) -> binary().
+public_key_from_x25519_public_key(_, _) ->
     ?nif_stub.
 
 %% @private

@@ -138,6 +138,65 @@ static ERL_NIF_TERM enif_ed25519_ref10_public_key(ErlNifEnv *env, int argc, ERL_
     return enif_make_binary(env, &public);
 }
 
+static ERL_NIF_TERM enif_ed25519_ref10_keypair_from_x25519_keypair(ErlNifEnv *env, int argc, ERL_NIF_TERM const argv[]) {
+    ErlNifBinary x25519_secret;
+    ErlNifBinary x25519_public;
+
+    ErlNifBinary ed25519_secret;
+    ErlNifBinary ed25519_public;
+
+    int signbit;
+
+    if ((argc != 2)
+            || (!enif_inspect_binary(env, argv[0], &x25519_public))
+            || (x25519_public.size != 32)
+            || (!enif_inspect_binary(env, argv[1], &x25519_secret))
+            || (x25519_secret.size != 32)) {
+        return enif_make_badarg(env);
+    }
+
+    if (!enif_alloc_binary(CRYPTO_SECRETKEYBYTES, &ed25519_secret)) {
+        return make_error_tuple(env, "alloc_failed");
+    }
+
+    if (!enif_alloc_binary(CRYPTO_PUBLICKEYBYTES, &ed25519_public)) {
+        return make_error_tuple(env, "alloc_failed");
+    }
+
+    if (ed25519_ref10_keypair_from_x25519_keypair(ed25519_public.data, ed25519_secret.data, &signbit,
+                x25519_public.data, x25519_secret.data) != 0) {
+        return make_error_tuple(env, "ed25519_keypair_from_x25519_keypair_failed");
+    }
+
+    return enif_make_tuple3(env, enif_make_binary(env, &ed25519_public),
+                                 enif_make_binary(env, &ed25519_secret),
+                                 enif_make_int(env, signbit));
+}
+
+static ERL_NIF_TERM enif_ed25519_ref10_public_key_from_x25519_public_key(ErlNifEnv *env, int argc, ERL_NIF_TERM const argv[]) {
+    ErlNifBinary x25519_public;
+    ErlNifUInt64 x25519_signbit;
+
+    ErlNifBinary ed25519_public;
+
+    if ((argc != 2)
+            || (!enif_inspect_binary(env, argv[0], &x25519_public))
+            || (x25519_public.size != 32)
+            || (!enif_get_uint64(env, argv[1], &x25519_signbit))) {
+        return enif_make_badarg(env);
+    }
+
+    if (!enif_alloc_binary(CRYPTO_PUBLICKEYBYTES, &ed25519_public)) {
+        return make_error_tuple(env, "alloc_failed");
+    }
+
+    if (ed25519_ref10_public_key_from_x225519_public_key(ed25519_public.data, x25519_public.data, x25519_signbit) != 0) {
+        return make_error_tuple(env, "ed25519_public_key_from_x25519_public_key_failed");
+    }
+
+    return enif_make_binary(env, &ed25519_public);
+}
+
 static ErlNifFunc nif_functions[] = {
     {"keypair",           0, enif_ed25519_ref10_keypair, ERL_NIF_DIRTY_JOB_CPU_BOUND},
     {"sign",              2, enif_ed25519_ref10_sign,    ERL_NIF_DIRTY_JOB_CPU_BOUND},
@@ -147,6 +206,9 @@ static ErlNifFunc nif_functions[] = {
     {"secret_key_expand", 1, enif_ed25519_ref10_secret_key_expand},
 
     {"public_key",        1, enif_ed25519_ref10_public_key},
+
+    {"keypair_from_x25519_keypair",       2, enif_ed25519_ref10_keypair_from_x25519_keypair, ERL_NIF_DIRTY_JOB_CPU_BOUND},
+    {"public_key_from_x25519_public_key", 2, enif_ed25519_ref10_public_key_from_x25519_public_key, ERL_NIF_DIRTY_JOB_CPU_BOUND},
 };
 
 static int on_load(ErlNifEnv *env, void **priv_data, ERL_NIF_TERM load_info)

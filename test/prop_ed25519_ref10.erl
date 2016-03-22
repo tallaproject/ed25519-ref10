@@ -39,8 +39,31 @@ prop_secret_key_expand() ->
            SecretA =:= SecretB
        end).
 
+-spec prop_x25519_key_conversion() -> term().
+prop_x25519_key_conversion() ->
+    ?FORALL(X25519KeyPair, x25519_keypair(),
+        begin
+            X25519P = maps:get(public, X25519KeyPair),
+            {#{ public := Ed25519P }, SignBit} = ed25519_ref10:keypair_from_x25519_keypair(X25519KeyPair),
+            Ed25519P =:= ed25519_ref10:public_key_from_x25519_public_key(X25519P, SignBit)
+        end).
+
+-spec prop_x25519_key_sign_open() -> term().
+prop_x25519_key_sign_open() ->
+    ?FORALL({X25519KeyPair, M}, {x25519_keypair(), binary()},
+       begin
+           {#{ secret := S, public := P }, _SignBit} = ed25519_ref10:keypair_from_x25519_keypair(X25519KeyPair),
+           Signature = ed25519_ref10:sign(M, S),
+           ed25519_ref10:open(Signature, M, P)
+       end).
+
 %% @private
 -spec keypair() -> term().
 keypair() ->
     #{ secret := SecretKey, public := PublicKey } = ed25519_ref10:keypair(),
     {SecretKey, PublicKey}.
+
+%% @private
+-spec x25519_keypair() -> term().
+x25519_keypair() ->
+    enacl_ext:curve25519_keypair().
