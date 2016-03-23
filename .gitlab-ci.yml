@@ -1,0 +1,9 @@
+image: erlang:18.3
+
+stages:
+    - test
+
+job:
+    stage: test
+    script:
+        - make check
