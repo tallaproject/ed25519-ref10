@@ -1,7 +1,9 @@
-image: erlang:18.3
+image: erlang:19
 
 before_script:
     - apt-get update -qq && apt-get install -y -qq libsodium-dev
+    - wget https://s3.amazonaws.com/rebar3/rebar3
+    - chmod +x rebar3
     - erl +V
 
 stages:
@@ -10,4 +12,4 @@ stages:
 job:
     stage: test
     script:
-        - make check
+        - make check REBAR=./rebar3
