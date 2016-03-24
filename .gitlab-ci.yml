@@ -11,8 +11,8 @@ test-18.3:
     script:
         - make check
 
-test-19.0:
-    image: ahfaeroey/otp:19.0
-    stage: test
-    script:
-        - make check
+#test-19.0:
+#    image: ahfaeroey/otp:19.0
+#    stage: test
+#    script:
+#        - make check
