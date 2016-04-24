@@ -6,27 +6,6 @@
 
 #include "ref10/api.h"
 
-static ERL_NIF_TERM enif_ed25519_ref10_keypair(ErlNifEnv *env, int argc, ERL_NIF_TERM const argv[]) {
-    ErlNifBinary public;
-    ErlNifBinary secret;
-
-    if (argc != 0) {
-        return enif_make_badarg(env);
-    }
-
-    if (!enif_alloc_binary(CRYPTO_SECRETKEYBYTES, &secret)) {
-        return make_error_tuple(env, "alloc_failed");
-    }
-
-    if (!enif_alloc_binary(CRYPTO_PUBLICKEYBYTES, &public)) {
-        return make_error_tuple(env, "alloc_failed");
-    }
-
-    ed25519_ref10_keypair(public.data, secret.data);
-
-    return enif_make_tuple2(env, enif_make_binary(env, &public), enif_make_binary(env, &secret));
-}
-
 static ERL_NIF_TERM enif_ed25519_ref10_sign(ErlNifEnv *env, int argc, ERL_NIF_TERM const argv[]) {
     ErlNifBinary signature;
 
@@ -76,24 +55,6 @@ static ERL_NIF_TERM enif_ed25519_ref10_open(ErlNifEnv *env, int argc, ERL_NIF_TE
     ret = ed25519_ref10_open(signature.data, message.data, message.size, public.data);
 
     return ret == 0 ? enif_make_atom(env, "true") : enif_make_atom(env, "false");
-}
-
-static ERL_NIF_TERM enif_ed25519_ref10_secret_key(ErlNifEnv *env, int argc, ERL_NIF_TERM const argv[]) {
-    ErlNifBinary secret;
-
-    if (argc != 0) {
-        return enif_make_badarg(env);
-    }
-
-    if (!enif_alloc_binary(CRYPTO_SECRETKEYBYTES, &secret)) {
-        return make_error_tuple(env, "alloc_failed");
-    }
-
-    if (ed25519_ref10_secret_key(secret.data) != 0) {
-        return make_error_tuple(env, "ed25519_ref10_secret_key_failed");
-    }
-
-    return enif_make_binary(env, &secret);
 }
 
 static ERL_NIF_TERM enif_ed25519_ref10_secret_key_expand(ErlNifEnv *env, int argc, ERL_NIF_TERM const argv[]) {
@@ -198,14 +159,12 @@ static ERL_NIF_TERM enif_ed25519_ref10_public_key_from_x25519_public_key(ErlNifE
 }
 
 static ErlNifFunc nif_functions[] = {
-    {"keypair",           0, enif_ed25519_ref10_keypair, ERL_NIF_DIRTY_JOB_CPU_BOUND},
     {"sign",              2, enif_ed25519_ref10_sign,    ERL_NIF_DIRTY_JOB_CPU_BOUND},
     {"open",              3, enif_ed25519_ref10_open,    ERL_NIF_DIRTY_JOB_CPU_BOUND},
 
-    {"secret_key",        0, enif_ed25519_ref10_secret_key},
-    {"secret_key_expand", 1, enif_ed25519_ref10_secret_key_expand},
+    {"secret_key_expand", 1, enif_ed25519_ref10_secret_key_expand, ERL_NIF_DIRTY_JOB_CPU_BOUND},
 
-    {"public_key",        1, enif_ed25519_ref10_public_key},
+    {"public_key",        1, enif_ed25519_ref10_public_key, ERL_NIF_DIRTY_JOB_CPU_BOUND},
 
     {"keypair_from_x25519_keypair",       2, enif_ed25519_ref10_keypair_from_x25519_keypair, ERL_NIF_DIRTY_JOB_CPU_BOUND},
     {"public_key_from_x25519_public_key", 2, enif_ed25519_ref10_public_key_from_x25519_public_key, ERL_NIF_DIRTY_JOB_CPU_BOUND},

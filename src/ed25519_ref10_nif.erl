@@ -10,10 +10,8 @@
 -module(ed25519_ref10_nif).
 
 %% Private API.
--export([keypair/0,
-         sign/2,
+-export([sign/2,
          open/3,
-         secret_key/0,
          secret_key_expand/1,
          public_key/1,
          keypair_from_x25519_keypair/2,
@@ -45,11 +43,6 @@ init() ->
     erlang:load_nif(File, 0).
 
 %% @private
--spec keypair() -> {binary(), binary()}.
-keypair() ->
-    ?nif_stub.
-
-%% @private
 -spec sign(binary(), binary()) -> binary().
 sign(_, _) ->
     ?nif_stub.
@@ -57,11 +50,6 @@ sign(_, _) ->
 %% @private
 -spec open(binary(), binary(), binary()) -> boolean().
 open(_, _, _) ->
-    ?nif_stub.
-
-%% @private
--spec secret_key() -> binary().
-secret_key() ->
     ?nif_stub.
 
 %% @private

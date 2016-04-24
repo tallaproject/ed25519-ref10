@@ -51,7 +51,8 @@
 %% @doc Generate a new Ed25519 keypair.
 -spec keypair() -> keypair().
 keypair() ->
-    {PublicKey, SecretKey} = ed25519_ref10_nif:keypair(),
+    SecretKey = secret_key(),
+    PublicKey = public_key(SecretKey),
     #{ secret => SecretKey, public => PublicKey }.
 
 %% @doc Sign a given message using a secret key.
@@ -75,7 +76,8 @@ open(Signature, Message, PublicKey) ->
 %% @doc Generate a new Ed25519 secret key.
 -spec secret_key() -> secret_key().
 secret_key() ->
-    ed25519_ref10_nif:secret_key().
+    Seed = enacl:randombytes(32),
+    ed25519_ref10_nif:secret_key_expand(Seed).
 
 %% @doc Generate a new Ed25519 secret key from a given seed.
 -spec secret_key_expand(Seed) -> secret_key()
