@@ -30,5 +30,5 @@ $ make doc
 
 
 <table width="100%" border="0" summary="list of modules">
-<tr><td><a href="https://lab.baconsvin.org/talla/ed25519_ref10/blob/develop/doc/ed25519_ref10.md" class="module">ed25519_ref10</a></td></tr></table>
+<tr><td><a href="https://github.com/tallaproject/ed25519-ref10/blob/develop/doc/ed25519_ref10.md" class="module">ed25519_ref10</a></td></tr></table>
 
