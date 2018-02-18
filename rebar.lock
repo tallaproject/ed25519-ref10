@@ -1,4 +1,4 @@
 [{<<"enacl">>,
   {git,"https://lab.baconsvin.org/talla/enacl.git",
-       {ref,"cc5942f9c4538444f47f8015fa59b2cc958e7ca7"}},
+       {ref,"558954539f6ebcbae9ded3d7054611ad505b7c12"}},
   0}].
